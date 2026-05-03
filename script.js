@@ -1,3 +1,4 @@
+// Display
 let display = {
   element: document.querySelector(".display"),
   append: function (text) {
@@ -25,14 +26,23 @@ let display = {
   },
 };
 
+let lastWasResultFlag = false;
+
+// Button Events
+
 document.querySelectorAll(".digit").forEach((b) =>
   b.addEventListener("click", (e) => {
+    if (lastWasResultFlag) {
+      display.clear();
+      lastWasResultFlag = false;
+    }
     display.append(e.target.textContent);
   }),
 );
 
 document.querySelectorAll(".operator").forEach((b) =>
   b.addEventListener("click", (e) => {
+    lastWasResultFlag = false;
     if (display.containOperator()) {
       display.process();
     }
@@ -42,15 +52,21 @@ document.querySelectorAll(".operator").forEach((b) =>
 
 document.querySelector("#equal").addEventListener("click", (e) => {
   display.process();
+  lastWasResultFlag = true;
 });
 
 document.querySelector("#clear").addEventListener("click", (e) => {
   display.clear();
 });
 
+// Functions
+
 function processOperation(operation) {
   const splited = operation.split(/([-+/*])/);
   if (splited.length == 3) {
+    if (splited[2] == "") {
+      return splited[0];
+    }
     return operate(splited[1], Number(splited[0]), Number(splited[2]));
   } else {
     return operation;
