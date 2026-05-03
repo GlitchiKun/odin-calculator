@@ -1,39 +1,52 @@
-const display = document.querySelector(".display");
+let display = {
+  element: document.querySelector(".display"),
+  append: function (text) {
+    this.setText(this.getText().concat(text));
+  },
+  process: function () {
+    this.setText(processOperation(this.getText()));
+  },
+  containOperator: function () {
+    return (
+      this.getText().includes("+") ||
+      this.getText().includes("-") ||
+      this.getText().includes("/") ||
+      this.getText().includes("*")
+    );
+  },
+  clear: function () {
+    this.setText("");
+  },
+  getText: function () {
+    return this.element.textContent;
+  },
+  setText: function (text) {
+    this.element.textContent = text;
+  },
+};
 
 document.querySelectorAll(".digit").forEach((b) =>
   b.addEventListener("click", (e) => {
-    addOnDisplay(e.target.textContent);
+    display.append(e.target.textContent);
   }),
 );
 
 document.querySelectorAll(".operator").forEach((b) =>
   b.addEventListener("click", (e) => {
-    if (containOperator(display.textContent)) {
-      processOperationOnDisplay();
+    if (display.containOperator()) {
+      display.process();
     }
-    addOnDisplay(e.target.textContent);
+    display.append(e.target.textContent);
   }),
 );
 
 document.querySelector("#equal").addEventListener("click", (e) => {
-  processOperationOnDisplay();
+  display.process();
 });
 
 document.querySelector("#clear").addEventListener("click", (e) => {
-  clearDisplay();
+  display.clear();
 });
-
-function addOnDisplay(text) {
-  display.textContent = display.textContent.concat(text);
-}
-
-function processOperationOnDisplay() {
-  display.textContent = processOperation(display.textContent);
-}
-
-function clearDisplay() {
-  display.textContent = "";
-}
 
 function processOperation(operation) {
   const splited = operation.split(/([-+/*])/);
@@ -42,15 +55,6 @@ function processOperation(operation) {
   } else {
     return operation;
   }
-}
-
-function containOperator(operation) {
-  return (
-    operation.includes("+") ||
-    operation.includes("-") ||
-    operation.includes("/") ||
-    operation.includes("*")
-  );
 }
 
 function operate(operator, a, b) {
