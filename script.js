@@ -1,18 +1,39 @@
 const display = document.querySelector(".display");
 
-document.querySelectorAll(".digit, .operator").forEach((b) =>
+document.querySelectorAll(".digit").forEach((b) =>
   b.addEventListener("click", (e) => {
-    display.textContent = display.textContent.concat(e.target.textContent);
+    addOnDisplay(e.target.textContent);
   }),
 );
 
-document.querySelector("#clear").addEventListener("click", (e) => {
-  display.textContent = "";
-});
+document.querySelectorAll(".operator").forEach((b) =>
+  b.addEventListener("click", (e) => {
+    if (containOperator(display.textContent)) {
+      processOperationOnDisplay();
+    }
+    addOnDisplay(e.target.textContent);
+  }),
+);
 
 document.querySelector("#equal").addEventListener("click", (e) => {
-  display.textContent = processOperation(display.textContent);
+  processOperationOnDisplay();
 });
+
+document.querySelector("#clear").addEventListener("click", (e) => {
+  clearDisplay();
+});
+
+function addOnDisplay(text) {
+  display.textContent = display.textContent.concat(text);
+}
+
+function processOperationOnDisplay() {
+  display.textContent = processOperation(display.textContent);
+}
+
+function clearDisplay() {
+  display.textContent = "";
+}
 
 function processOperation(operation) {
   const splited = operation.split(/([-+/*])/);
@@ -21,6 +42,15 @@ function processOperation(operation) {
   } else {
     return operation;
   }
+}
+
+function containOperator(operation) {
+  return (
+    operation.includes("+") ||
+    operation.includes("-") ||
+    operation.includes("/") ||
+    operation.includes("*")
+  );
 }
 
 function operate(operator, a, b) {
