@@ -10,6 +10,19 @@ document.querySelector("#clear").addEventListener("click", (e) => {
   display.textContent = "";
 });
 
+document.querySelector("#equal").addEventListener("click", (e) => {
+  display.textContent = processOperation(display.textContent);
+});
+
+function processOperation(operation) {
+  const splited = operation.split(/([-+/*])/);
+  if (splited.length == 3) {
+    return operate(splited[1], Number(splited[0]), Number(splited[2]));
+  } else {
+    return operation;
+  }
+}
+
 function operate(operator, a, b) {
   switch (operator) {
     case "+":
