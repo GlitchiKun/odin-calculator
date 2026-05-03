@@ -1,3 +1,15 @@
+const display = document.querySelector(".display");
+
+document.querySelectorAll(".digit, .operator").forEach((b) =>
+  b.addEventListener("click", (e) => {
+    display.textContent = display.textContent.concat(e.target.textContent);
+  }),
+);
+
+document.querySelector("#clear").addEventListener("click", (e) => {
+  display.textContent = "";
+});
+
 function operate(operator, a, b) {
   switch (operator) {
     case "+":
@@ -33,4 +45,3 @@ function multiply(a, b) {
 function divide(a, b) {
   return a / b;
 }
-
